@@ -2,15 +2,18 @@ const express = require("express");
 const multer = require("multer");
 const docxToPDF = require("docx-pdf");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: function (req, file, cb) {
     cb(null, "./uploads");
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
@@ -25,12 +28,13 @@ app.post("/convertfile", upload.single("file"), (req, res, next) => {
       });
     }
 
+    // Defining output file path
     let outputpath = path.join(
       __dirname,
       "files",
       `${req.file.originalname}+.pdf`
     );
-    docxToPDF(req.file.path, outputpath, function (err, result) {
+    docxToPDF(req.file.path, outputpath, (err, result) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
