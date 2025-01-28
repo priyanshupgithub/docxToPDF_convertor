@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaFileWord } from "react-icons/fa6";
-import axios from "axios"
+import axios from "axios";
 
 const Body = () => {
   const [selectedFile, setSelectedFile] = useState(null);
